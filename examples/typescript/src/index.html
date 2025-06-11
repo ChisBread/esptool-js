@@ -2,38 +2,229 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>ESP Tool</title>
+        <title>ChisLink 🧀 - 固件更新工具</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
         <link
-            href="https://fonts.googleapis.com/css?family=Orbitron"
+            href="https://fonts.googleapis.com/css?family=Orbitron:400,700,900"
             rel="stylesheet"
         />
-        <link rel="icon" href="../assets/favicon.ico" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧀</text></svg>" />
+        <style>
+            :root {
+                --cheese-yellow: #FFD700;
+                --cheese-orange: #FFA500;
+                --rainbow-red: #FF6B6B;
+                --rainbow-orange: #FF8E53;
+                --rainbow-yellow: #FF6B9D;
+                --rainbow-green: #4ECDC4;
+                --rainbow-blue: #45B7D1;
+                --rainbow-indigo: #96CEB4;
+                --rainbow-violet: #FFEAA7;
+            }
+            
+            body {
+                background: linear-gradient(135deg, 
+                    var(--rainbow-red) 0%,
+                    var(--rainbow-orange) 14%,
+                    var(--cheese-yellow) 28%,
+                    var(--rainbow-green) 42%,
+                    var(--rainbow-blue) 57%,
+                    var(--rainbow-indigo) 71%,
+                    var(--rainbow-violet) 85%,
+                    var(--rainbow-red) 100%);
+                background-size: 400% 400%;
+                animation: rainbowShift 10s ease infinite;
+                min-height: 100vh;
+                font-family: 'Orbitron', monospace;
+            }
+            
+            @keyframes rainbowShift {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            
+            .container {
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 20px;
+                padding: 30px;
+                margin-top: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                backdrop-filter: blur(10px);
+            }
+            
+            h1 {
+                font-family: 'Fredoka One', cursive;
+                background: linear-gradient(45deg, var(--cheese-yellow), var(--cheese-orange), var(--rainbow-red));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+            
+            h4 {
+                color: #666;
+                font-weight: 300;
+                margin-bottom: 30px;
+            }
+            
+            .cheese-icon {
+                display: inline-block;
+                font-size: 2em;
+                animation: bounce 2s infinite;
+                margin-right: 15px;
+            }
+            
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-10px); }
+                60% { transform: translateY(-5px); }
+            }
+            
+            .btn {
+                border-radius: 25px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: all 0.3s ease;
+                border: none;
+                padding: 10px 20px;
+            }
+            
+            .btn-primary {
+                background: linear-gradient(45deg, var(--rainbow-blue), var(--rainbow-indigo));
+                color: white;
+            }
+            
+            .btn-info {
+                background: linear-gradient(45deg, var(--cheese-yellow), var(--cheese-orange));
+                color: #333;
+            }
+            
+            .btn-warning {
+                background: linear-gradient(45deg, var(--rainbow-orange), var(--rainbow-red));
+                color: white;
+            }
+            
+            .btn-danger {
+                background: linear-gradient(45deg, var(--rainbow-red), #FF1744);
+                color: white;
+            }
+            
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            }
+            
+            .zip-upload-area {
+                background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+                border: 3px dashed var(--cheese-orange);
+                border-radius: 15px;
+                padding: 20px;
+                margin-bottom: 25px;
+                transition: all 0.3s ease;
+            }
+            
+            .zip-upload-area:hover {
+                background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+                transform: scale(1.02);
+            }
+            
+            .table {
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+            
+            .table thead {
+                background: linear-gradient(45deg, var(--rainbow-blue), var(--rainbow-indigo));
+                color: white;
+            }
+            
+            .table tbody tr:hover {
+                background-color: rgba(255, 215, 0, 0.1);
+            }
+            
+            .table tbody input[type="text"] {
+                background-color: white !important;
+                color: #333 !important;
+                border: 1px solid #ddd;
+                padding: 5px;
+                border-radius: 4px;
+                font-weight: bold;
+            }
+            
+            .table tbody span {
+                color: #333 !important;
+                font-weight: bold;
+            }
+            
+            .table td {
+                background-color: white !important;
+                color: #333 !important;
+            }
+            
+            .alert-success {
+                background: linear-gradient(45deg, var(--rainbow-green), var(--rainbow-blue));
+                border: none;
+                color: white;
+                border-radius: 15px;
+            }
+            
+            .form-control, select {
+                border-radius: 10px;
+                border: 2px solid var(--cheese-orange);
+                padding: 10px;
+                transition: all 0.3s ease;
+            }
+            
+            .form-control:focus, select:focus {
+                border-color: var(--rainbow-blue);
+                box-shadow: 0 0 0 0.2rem rgba(69, 183, 209, 0.25);
+            }
+            
+            #terminal {
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                margin-top: 20px;
+            }
+        </style>
          <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.min.js"></script>
          <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     </head>
     <body>
-        <h1 align="center"><p><img src="../assets/esp-logo.png" width="42" height="42" style="vertical-align:middle" crossorigin></img> ESP Tool</p></h1>
-        <h4 align="center">A Serial Flasher utility for Espressif chips</h4>
-        <div id="safariErr" style="display:none"><p align="center" style="color:red">This tool is not supported on Safari browser!</p>
+        <h1 align="center">
+            <span class="cheese-icon">🧀</span>ChisLink固件更新 
+            <span class="cheese-icon">🧀</span>
+        </h1>
+        <h4 align="center"> 让固件更新不再麻烦！</h4>
+        <div id="safariErr" style="display:none"><p align="center" style="color:red">抱歉，ChisLink暂不支持Safari浏览器！请使用Chrome或Edge浏览器。</p>
         </div>
         <div align="center">
-            <a class="btn btn-info" href="./docs/index.html">View the API Documentation</a>
+            <!-- <a class="btn btn-info" href="./docs/index.html">📚 查看API文档</a> -->
 
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="debugLogging" value="">
-                <label class="form-check-label" for="debugLogging">Show Debug log</label>
+                <label class="form-check-label" for="debugLogging">🐛 显示调试日志</label>
             </div>
           </div>
         <div class="container" id="main">
             <hr/>
             <div id="program">
-                <h3> Program </h3>
-                <label for="baudrates" id="lblBaudrate">Baudrate:</label>
-                <label style="display:none" id="lblConnTo">Connected to device: </label>
+                <h3>🧀 ChisLink 固件更新</h3>
+                <label for="baudrates" id="lblBaudrate">波特率:</label>
+                <label style="display:none" id="lblConnTo">已连接到设备: </label>
                 <select name="baudrates" id="baudrates">
                     <option value="921600">921600</option>
                     <option value="460800">460800</option>
@@ -41,41 +232,54 @@
                     <option value="115200">115200</option>
                 </select>
 
-                <br><br>
-
-                <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Connect" />
-                <input class="btn btn-info btn-sm" type="button" id="copyTraceButton" value="Copy Trace" />
-                <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Disconnect" />
-                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Erase Flash" />
                 <br>
 
+                <input class="btn btn-info btn-sm" type="button" id="connectButton" value="🔗 连接设备" />
+                <input class="btn btn-info btn-sm" type="button" id="copyTraceButton" value="📋 复制日志" />
+                <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="🔌 断开连接" />
+                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="🗑️ 擦除闪存" />
+                <br>
+                <br>
                 <div class="alert alert-danger alert-dismissible" id="alertDiv" style="display:none; margin-top:10px">
                     <a href="#" class="close" aria-label="close" onclick="$('.alert').hide()">&times;</a>
                     <span id="alertmsg"></span>
                 </div>
 
                 <div id="files">
+                    <!-- ZIP文件上传区域 -->
+                    <div class="form-group zip-upload-area">
+                        <label for="zipFileInput" style="font-weight: bold; color: #495057;">
+                            🧀 选择ChisLink固件包:
+                        </label>
+                        <input type="file" class="form-control-file" id="zipFileInput" accept=".zip" style="margin-top: 8px;" />
+                        <small class="form-text text-muted" style="margin-top: 5px; display: block;">
+                            支持chislink-fw格式的ZIP文件，将自动解析分区表和bin文件<br>
+                            ZIP文件应包含 flasher_args.json 和相应的 .bin 文件
+                        </small>
+                    </div>
+                    
                     <table class="table table-striped" id="fileTable">
                         <thead class="thead-light">
                             <tr>
-                                <th>Flash Address</th>
-                                <th>File</th>
-                                <th></th>
+                                <th>🎯 闪存地址</th>
+                                <th>📁 文件名</th>
+                                <th>⚡ 状态</th>
+                                <th>🗑️ 操作</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
                         </tbody>
                     </table>
-                    <input class="btn btn-info btn-sm" type="button" id="addFile" value="Add File" />
-                    <input class="btn btn-info btn-sm" type="button" id="programButton" value="Program" />
+                    <input class="btn btn-info btn-sm" type="button" id="addFile" value="➕ 添加文件" />
+                    <input class="btn btn-primary btn-sm" type="button" id="programButton" value="🧀 开始烧录" />
                 </div>
                 <output id="list"></output>
                 <hr/>
             </div>
             <div id="console">
-                <h3>Console </h3>
-                <label style="display:none" id="lblConsoleFor">Connected to device: </label>
-                <label for="consoleBaudrates" id="lblConsoleBaudrate">Baudrate:</label>
+                <h3>🖥️ 串口监控</h3>
+                <label style="display:none" id="lblConsoleFor">已连接到设备: </label>
+                <label for="consoleBaudrates" id="lblConsoleBaudrate">波特率:</label>
                 <select name="consoleBaudrates" id="consoleBaudrates">
                     <option value="115200">115200</option>
                     <option value="74880">74880</option>
@@ -83,9 +287,9 @@
 
                 <br><br>
 
-                <input class="btn btn-info" type="button" id="consoleStartButton" value="Start" />
-                <input class="btn btn-info" type="button" id="consoleStopButton" value="Stop" />
-                <input class="btn btn-info" type="button" id="resetButton" value="Reset" />
+                <input class="btn btn-info" type="button" id="consoleStartButton" value="▶️ 开始监控" />
+                <input class="btn btn-warning" type="button" id="consoleStopButton" value="⏹️ 停止监控" />
+                <input class="btn btn-primary" type="button" id="resetButton" value="🔄 复位设备" />
                 <hr/>
             </div>
             <div id="terminal"></div>
