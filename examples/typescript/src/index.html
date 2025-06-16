@@ -196,6 +196,48 @@
                 box-shadow: 0 10px 30px rgba(0,0,0,0.2);
                 margin-top: 20px;
             }
+            
+            /* 进度条样式修复 */
+            .progress-cell {
+                padding: 10px !important;
+                vertical-align: middle !important;
+                background-color: white !important;
+                text-align: center !important;
+            }
+            
+            .action-cell {
+                padding: 10px !important;
+                vertical-align: middle !important;
+                background-color: white !important;
+                text-align: center !important;
+            }
+            
+            .progress-cell progress {
+                width: 100%;
+                height: 20px;
+                border-radius: 10px;
+                border: none;
+                background-color: #f0f0f0;
+                overflow: hidden;
+                display: block;
+                margin: 0 auto;
+            }
+            
+            .progress-cell progress::-webkit-progress-bar {
+                background-color: #f0f0f0;
+                border-radius: 10px;
+            }
+            
+            .progress-cell progress::-webkit-progress-value {
+                background: linear-gradient(45deg, var(--cheese-yellow), var(--cheese-orange));
+                border-radius: 10px;
+                transition: width 0.3s ease;
+            }
+            
+            .progress-cell progress::-moz-progress-bar {
+                background: linear-gradient(45deg, var(--cheese-yellow), var(--cheese-orange));
+                border-radius: 10px;
+            }
         </style>
          <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.min.js"></script>
          <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>

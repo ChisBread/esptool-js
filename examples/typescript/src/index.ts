@@ -113,7 +113,7 @@ async function parseChislinkFirmwareZip(zipFile: File) {
       
       // Get binary data as Uint8Array first, then convert to binary string
       const uint8Array = await binFile.async("uint8array");
-      const binaryData = Array.from(uint8Array).map(byte => String.fromCharCode(byte)).join('');
+      const binaryData = Array.from(uint8Array).map((byte: number) => String.fromCharCode(byte)).join('');
       
       // Add row to table
       const rowCount = table.rows.length;
@@ -569,12 +569,15 @@ programButton.onclick = async () => {
       fileData = hiddenInput ? (hiddenInput as any).data : null;
     }
 
-    const progressBar = row.cells[2].childNodes[0];
+    const progressBar = row.cells[2].querySelector('progress') as HTMLProgressElement;
 
-    progressBar.textContent = "0";
-    progressBars.push(progressBar);
+    if (progressBar) {
+      progressBar.value = 0;
+      progressBar.max = 100;
+      progressBars.push(progressBar);
+    }
 
-    row.cells[2].style.display = "initial";
+    row.cells[2].style.display = "table-cell";
     row.cells[3].style.display = "none";
 
     fileArray.push({ data: fileData, address: offset });
